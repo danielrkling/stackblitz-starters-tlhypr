@@ -1,15 +1,12 @@
-/* config:{
-
-} */
-
 import * as rollup from '@rollup/browser';
 import * as Babel from '@babel/standalone';
+import * as ts from 'typescript'
 
 import File from './file'
 import globals from './globals'
 
 
-export async function compileTSFile(file: File) {
+export async function compileFile(file: File) {
     try {
 
         var bundle = await rollup.rollup({
@@ -27,27 +24,15 @@ export async function compileTSFile(file: File) {
             ],
         })
 
-        var result = await bundle.generate({ format: 'es'})
+        var result = await bundle.generate({ format: 'es' })
 
         var src = result.output[0].code
-        var code = compileJavascriptToIE11(src)
 
-        // var scriptCode = '';
-        // if (config.scripts) {
-        //     // var scripts = config.scripts.map(async function (path) { return await globals.files[path].getText() })
-        //     // await Promise.all(scripts)
-        //     for (const path of config.scripts) {
-        //         scriptCode += await loadModule(path, {}) + '\n'
-        //     }
-
-        //     code = scriptCode + code;
-        // }
-
-        var outputFilePath = file.path()+'.js'
+        var outputFilePath = prompt("Output Filepath:", file.path() + '.js')
 
 
         var outputFile = await globals.rootFolder.newFile(outputFilePath)
-        outputFile.setText(code)
+        outputFile.setText(src)
 
     } catch (e) {
         console.log(e)
@@ -68,34 +53,60 @@ export async function compileTSFile(file: File) {
 //     scripts?: string[];
 // }
 
-// const compileButton = document.getElementById('compileButton');
-// compileButton.addEventListener('click', async function () { await compile() })
+const compileButton = document.getElementById('compileButton');
+compileButton.addEventListener('click', async function () { await compile() })
 
-// export async function compile(watchFile?: File) {
+export async function compile() {
 
-//     try {
-//         compileButton.children[0].classList.add('fa-spin')
+    try {
+        compileButton.children[0].classList.add('fa-spin')
+
+        // @ts-ignore
+        window.config = {};
+        var configJS = await globals.files['config.js'].getText() as string;
+        eval(configJS)
+
+        var bundle = await rollup.rollup({
+                                    // @ts-ignore
+
+            ...window.config.rollup,
+            plugins: [
+                {
+                    name: 'loader',
+                    resolveId(source, importer) {
+                        return resolveModule(source, importer)
+                    },
+                    async load(id) {
+                        // @ts-ignore
+                        return await loadModule(id, window.config)
+                    }
+                }
+            ],
+        })
+                        // @ts-ignore
+
+        var result = await bundle.generate({ format: 'es', ...window.config.outputOptions })
+
+        var src = result.output[0].code
+                                // @ts-ignore
+
+        var code = compileJavascript(src, window.config.babel)
 
 
-//         var configs = Function(compileTypescript(globals.files['config.ts'].model.getValue(), {
-//             parserOpts: {
-//                 allowReturnOutsideFunction: true
-//             }
-//         }))();
+                        // @ts-ignore
 
-//         for await (const config of configs) {
-//             if (config.format === 'css') {
-//                 await bundleSCSS(config)
-//             } else {
-//                 await bundle(config)
-//             }
-//         }
-//     } catch (e) {
-//         console.log(e)
-//     }
-//     compileButton.children[0].classList.remove('fa-spin')
-//     compileButton.classList.remove('orange')
-// }
+        var outputFilePath = window.config.outputPath
+
+        var outputFile = await globals.rootFolder.newFile(outputFilePath)
+        outputFile.setText(code)
+
+
+    } catch (e) {
+        console.log(e)
+    }
+    compileButton.children[0].classList.remove('fa-spin')
+    compileButton.classList.remove('orange')
+}
 
 // async function bundleSCSS(config) {
 //     try {
@@ -220,8 +231,9 @@ function resolveModule(sourcePath: string, importerPath: string) {
         }
     }
 }
+                        // @ts-ignore
 
-async function loadModule(sourcePath: string, opts?: object): Promise<string> {
+async function loadModule(sourcePath: string, opts?: typeof window.config): Promise<string> {
 
     if (sourcePath.slice(0, 8) === 'https://') {
         var response = await fetch(sourcePath)
@@ -240,56 +252,37 @@ async function loadModule(sourcePath: string, opts?: object): Promise<string> {
 
 
     switch (language) {
-        case 'typescript': return compileTypescript(text);
-        case 'javascript': return text;
+        case 'typescript': 
+        case 'javascript': 
+        return compileTypescript(text, opts?.typescript);
         //case 'scss': return compileCSS(await sassCompileString(text, file.name()));
         case 'css': return compileCSS(text);
         default: return '';
     }
 }
 
+                        // @ts-ignore
 
-export function compileTypescript(src: string): string {
+export function compileTypescript(src: string, opts?: typeof window.config.typescript): string {
     try {
-        return Babel.transform(src, {
-            presets: ['typescript'],
-            targets: 'last 2 edge versions',
-            sourceType: "unambiguous",
-            // filename: "file.ts",
-        }).code;
+        return ts.transpile(src, {
+            jsx: ts.JsxEmit.React,
+            module: ts.ModuleKind.ESNext,
+            target: ts.ScriptTarget.Latest,
+
+            ...opts
+        })
     } catch (e) {
         console.log(e)
     }
 }
+                        // @ts-ignore
 
-function compileJavascriptToIE11(src: string): string {
+function compileJavascript(src: string, opts: typeof window.config.babel): string {
     try {
         return Babel.transform(src, {
             presets: ['env'],
-            targets: 'ie 11',
-            sourceType: "unambiguous",
-            //filename: "file.ts",
-        }).code;
-    } catch (e) {
-        console.log(e)
-    }
-}
-
-// function compileTSX(src: string, opts?: object): string {
-//     try {
-//         var result = ts.transpileModule(src, { compilerOptions: { jsx: 'react' } }).outputText;
-//         console.log(result)
-//         return result
-//     } catch (e) {
-//         console.log("TS Error" + e)
-//     }
-// }
-
-function compileJavascript(src: string, target: string, opts?: object): string {
-    try {
-        return Babel.transform(src, {
-            presets: ['env'],
-            targets: target,
+            // targets: 'ie 11',
             sourceType: "unambiguous",
             filename: "file.ts",
             ...opts
@@ -298,6 +291,8 @@ function compileJavascript(src: string, target: string, opts?: object): string {
         console.log(e)
     }
 }
+
+
 
 // async function sassCompileString(src: string, name?: string): Promise<string> {
 //     return new Promise((resolve, reject) => {

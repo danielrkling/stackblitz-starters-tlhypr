@@ -21,6 +21,7 @@ module.exports = {
   externals: {
     "monaco-editor": "monaco",
     "@rollup/browser": "rollup",
-    "@babel/standalone": "Babel"
+    "@babel/standalone": "Babel",
+    "typescript": "ts"
   },
 };

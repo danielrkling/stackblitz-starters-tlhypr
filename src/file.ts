@@ -6,7 +6,7 @@ import { leftEditor, rightEditor, leftTabs, rightTabs } from './editor'
 // import { previewMarkdown } from './markdown'
 //import { compileTypescript } from './compile'
 import * as monaco from 'monaco-editor'
-import {compileTSFile} from './compile'
+import {compileFile} from './compile'
 
 export default class File {
 
@@ -215,7 +215,7 @@ export default class File {
 				...(this.language() === 'javascript' || this.language() === 'typescript' ? [{
 					icon: '<i class="fa-solid fa-gear"></i>',
 					label: 'Compile',
-					action: async function () { await compileTSFile(self) }
+					action: async function () { await compileFile(self) }
 				}] : []),
 				...(this.language() === 'markdown' ? [{
 					icon: '<i class="fa-solid fa-gear"></i>',
