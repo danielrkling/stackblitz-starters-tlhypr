@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/app.ts',
   module: {
     rules: [
       {
@@ -15,10 +15,12 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'bundle.js',
+    filename: 'app.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  externals:{
-    'monaco-editor':'monaco'
-  }
+  externals: {
+    "monaco-editor": "monaco",
+    "@rollup/browser": "rollup",
+    "@babel/standalone": "Babel"
+  },
 };
