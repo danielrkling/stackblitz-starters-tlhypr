@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Editor</title>
+  <link rel="icon" href="./favicon.ico.png" type="image/png" />
+  <link rel="stylesheet" href="./dist/app.css">
+
+
+  <link rel="stylesheet" data-name="vs/editor/editor.main"
+    href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"  />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" />
+
+</head>
+
+<body>
+  <div id="main">
+    <div id="sidebar">
+      <div class="button-row">
+
+        <!-- <span id="autoSave" class="fa-stack fa-3x">
+          <i class="fa-solid fa-rotate fa-stack-2x"></i>
+          <i class="fa-solid fa-floppy-disk fa-stack-1x"></i>
+          
+        </span> -->
+        <button id="autoSave"><i class="fa-solid fa-floppy-disk"></i></button>
+        <button id="compileButton"><i class="fa-solid fa-gear"></i></button>
+        <button id="splitView"><i class="fa-solid fa-table-columns"></i></button>
+        <button id="viewLog"><i class="fa-solid fa-terminal"></i></button>
+        <!-- <input id="autoSave" type="checkbox" checked><label for="autoSave">Auto Save </label> -->
+
+      </div>
+      <div id="tree">
+        <button id="openFolder" ><i class="fa-solid fa-folder-tree fa-lg "></i>Open Directory</button>
+      </div>
+      <div class="button-row">
+        <button id="npmButton"><i class="fa-brands fa-npm"></i></button>
+        <input id='npmPackageName' placeholder="package-name">
+      </div>
+    </div>
+    <div id="resizer"></div>
+
+    <div id="container">
+      <div id="leftContainer">
+        <div id="leftTabs" class="tabs"></div>
+        <div id="leftEditor"></div>
+      </div>
+      <div id="rightContainer" class="hidden">
+        <div id="rightTabs" class="tabs"></div>
+        <div id="rightEditor"></div>
+      </div>
+    </div>
+  </div>
+  <div id='previewContainer' class='hidden'>
+    <div id='preview' class="markdown-body"></div>
+  </div>
+  <div id='logContainer' class='hidden'>
+    <div id='log'></div>
+  </div>
+
+  <script src="https://unpkg.com/@rollup/browser/dist/rollup.browser.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/sass.js@0.11.1/./dist/sass.sync.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/5.1.6/typescript.min.js" ></script>
+
+  <!-- MONACO JS -->
+  <script>
+    var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs' } };  
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs/loader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs/editor/editor.main.nls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.41.0/min/vs/editor/editor.main.js"></script>
+
+
+  <script type="text/javascript" src="./dist/app.js"></script>
+
+</body>
+
+</html>
