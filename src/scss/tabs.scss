@@ -1,0 +1,31 @@
+.tabs {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    width: 100%;
+    overflow: hidden;
+    user-select: none;
+    background-color: #111;
+    flex-shrink: 0;
+
+    .tab {
+        background-color: #333;
+        border-radius: 4px 4px 0 0;
+        color: white;
+        margin-top: 2px;
+        margin-right: 2px;
+        padding: 0 2px 2px 2px;
+        border: 2px solid #222;
+        border-bottom: none;
+
+        &:hover {
+            background-color: #666;
+        }
+
+        &.active {
+            //box-shadow: inset 0 0 999px 0 rgba(218, 165, 32, 0.2);
+            border-color: rgb(177, 133, 22);
+        }
+    }
+
+
+}

@@ -1,0 +1,45 @@
+.context-menu {
+    position: absolute;
+    font-size: .9em;
+    z-index: 1;
+    background-color: #444;
+    color: #eee;
+    padding: 4px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.61);
+    min-width: 100px;
+
+    i {
+        width: 20px;
+    }
+
+    &.hidden {
+        display: none !important;
+    }
+
+    &>* {
+        width: 100%;
+        padding: 2px;
+        border-radius: 4px;
+        white-space: no-wrap;
+        overflow: hidden;
+    }
+
+    &>hr {
+        border-radius: 0;
+        padding: 0;
+        margin: 0;
+        border: none;
+        border-top: 1px solid #666;
+    }
+
+    .context-menu-action {
+        cursor: pointer;
+
+        &:hover {
+            color: white;
+            background-color: #333;
+        }
+
+    }
+}

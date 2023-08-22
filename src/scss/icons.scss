@@ -1,0 +1,69 @@
+
+.fa-folder,
+.fa-folder-open {
+    color: #2f78ef;
+}
+
+.fa-chevron-right,
+.fa-chevron-down {
+    color: #666;
+}
+
+.fa-square-js,
+.js-color {
+    color: goldenrod;
+}
+
+.fa-square-js.typescript,
+.ts-color {
+    color: #007180;
+}
+
+.fa-palette {
+    color: #d754804c;
+}
+
+.fa-palette.scss {
+    color: #ef46a3;
+}
+
+
+.fa-code {
+    transform: scale(0.8, 1);
+    transform-origin: left;
+    color: #3575b1;
+}
+
+.fa-database {
+    color: #00804f;
+}
+
+.fa-scroll {
+    color: red;
+    transform: scale(0.8, 1);
+    transform-origin: left;
+}
+
+.fa-font {
+    color: white;
+}
+
+.fa-brackets-curly {
+    color: #af4be9;
+}
+
+.fa-book {
+    color: #ff7300;
+}
+
+.fa-npm {
+    color: rgb(170, 20, 20);
+}
+
+.orange {
+    color: rgb(228, 121, 0);
+
+    &>* {
+        color: rgb(228, 121, 0);
+    }
+}

@@ -2,12 +2,13 @@
   "name": "node-starter",
   "version": "0.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"rollup -c && sas --sourcemap=nones src/scss/app.scss dist/app.css"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.2",
     "rollup": "^3.28.1",
-    "ts-loader": "^9.4.4",
+    "sass": "^1.66.1",
     "tslib": "^2.6.2"
   },
   "dependencies": {
